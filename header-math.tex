@@ -16,12 +16,23 @@
 \DeclarePairedDelimiter\magn{\lvert\lvert}{\rvert\rvert}
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\vecnum{\langle}{\rangle}
 
 \DeclareRobustCommand{\eel}[1]{\begin{align*}{#1}\end{align*}}
 \newmdenv[roundcorner=8pt,align=center,linecolor=boxbg,
   backgroundcolor=boxbg,linewidth=4,outerlinewidth=2,outerlinecolor=bonkle]{stonk}
 
 \begin{document}
+
+On Debian, in addition to the normal recommended package, you'll probably also have to install things like texlive-latex-extra or texlive-science to get all the necessessary things.
+
+\begin{align*}
+  \vec a=\vecnum{0,5,3}\\
+  \sgn 5+\abs{3-5}\\
+  \magn{\vecnum{2,5,14}}=15\\
+  \floor{5.5}=\ceil{5}=5\\
+  \ceil{5.5}=\floor{6.7}=6
+\end{align*}
 
 \begin{align*}
 43x^2+27x-5&=0\\
