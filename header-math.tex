@@ -63,4 +63,81 @@ x&=\frac{-27\pm\sqrt{1589}}{86}\\
 hi
 \end{stonk}
 
+\section*{Vector product things}
+
+section 12.4, table 11
+
+Cross product produces a vector that is perpendicular to the input vectors.  Magnitude of the cross product is the area of the parallelogram made by the two vectors.
+
+\begin{stonk}
+  Cross product works only with 3 dimensional vectors (for now, at least?).
+  
+  Important equations:
+  \begin{align*}
+    \magn{\vec a}^2=\vec a\cdot\vec a\\
+    \vec{a}\cdot\vec{b}=\magn{\vec{a}}*\magn{\vec{b}}*\cos\theta\\
+    \magn{\vec{a}\times\vec{b}}=\magn{\vec{a}}*\magn{\vec{b}}*\sin\theta\\
+    A_{2-parallelogram}=\magn{\vec a\times\vec b}\\
+    A_{3-parallelogram}=(\vec a\times\vec b)\cdot\vec c\\
+    \vec a\perp\vec a\times\vec b\perp\vec b
+  \end{align*}
+  Fun facts as a result:
+  \begin{align*}
+    \vec{a}\cdot\vec{b}=0&\Leftrightarrow\vec a\perp\vec b\\
+    \magn{\vec{a}\times\vec{b}}=0&\Leftrightarrow\vec a\parallel\vec b\\
+  \end{align*}
+\end{stonk}
+
+
+\subsection*{Volume of 3-parallelogram}
+
+\begin{align*}
+  V&=bh\\
+  A_{base}=b&=\magn{\vec a\times\vec b}\\
+  h&=\magn{\vec{c}}*\cos\theta_{cp}
+\end{align*}
+
+Where $\theta$ is angle between $\vec{c}$ and a vector perpendicular to both $\vec a$ and $\vec b$, $\vec a\times\vec b$.
+
+\begin{align*}
+  (\vec a\times\vec b)\cdot\vec c&=\magn{\vec a\times\vec b}\magn{\vec c}\cos\theta_{cp}\\
+  V&=bh\\
+  &=\magn{\vec a\times\vec b}\magn{\vec{c}}\cos\theta_{cp}\\
+  &=(\vec a\times\vec b)\cdot\vec c\\
+\end{align*}
+
+\subsection*{Dot product cosine thing}
+
+Justification for dot product cosine, using law of cosines (given the following):
+
+For the latter statement, imagine law of cosines where $\vec a$ and $vec b$ are the legs, and $\vec c$ is the hypotenuse.  Invert $\vec a$ in your head - notice how $-\vec a+\vec b=\vec c$.
+
+So, prove
+
+\begin{align*}
+  \magn{\vec{a}\cdot\vec{b}}=\magn{\vec{a}}*\magn{\vec{b}}*\cos\theta
+\end{align*}
+
+given
+
+\begin{align*}
+  \vec v=\magn{\vec v}^2\\
+  \vec b-\vec a=\vec c\\
+  \magn{\vec a}^2+\magn{\vec b}^2-2\magn{\vec a}\magn{\vec b}\cos\theta=\magn{\vec c}^2
+\end{align*}
+
+
+\begin{align*}
+  &\vec a\cdot\vec a+\vec b\cdot\vec b-2\magn{\vec a}\magn{\vec b}\cos\theta\\
+  &=\vec c\cdot\vec c\\
+  &=(\vec b-\vec a)\cdot(\vec b-\vec a)\\
+  &=\vec b\cdot\vec b-2\vec b\cdot\vec a+\vec a\cdot\vec a
+\end{align*}
+
+\begin{align*}
+  -2\magn{\vec a}\magn{\vec b}\cos\theta&=-2\vec a\cdot\vec b\\
+  \magn{\vec a}\magn{\vec b}\cos\theta&=\vec a\cdot\vec b
+\end{align*}
+
+
 \end{document}
