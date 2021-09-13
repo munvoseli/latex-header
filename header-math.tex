@@ -2,18 +2,22 @@
 \usepackage{geometry}
 \geometry{a4paper, portrait, margin=2cm}
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{mathtools}
 \usepackage{graphicx}
+\usepackage{tikz}
 \graphicspath{ {./} }
 \usepackage[framemethod=TikZ]{mdframed}
 \usepackage{lipsum}
 
+\setlength\parindent{0pt}
+
 \definecolor{boxbg}{HTML}{FFFEB7}
-\definecolor{bonkle}{HTML}{FF1500}
+\definecolor{bonkle}{HTML}{0015FF}
 
 \DeclareMathOperator{\sgn}{sign}
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}
-\DeclarePairedDelimiter\magn{\lvert\lvert}{\rvert\rvert}
+\DeclarePairedDelimiter\magn{\lvert}{\rvert}
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 \DeclarePairedDelimiter\vecnum{\langle}{\rangle}
@@ -21,6 +25,51 @@
 \DeclareRobustCommand{\eel}[1]{\begin{align*}{#1}\end{align*}}
 \newmdenv[roundcorner=8pt,align=center,linecolor=boxbg,
   backgroundcolor=boxbg,linewidth=4,outerlinewidth=2,outerlinecolor=bonkle]{stonk}
+
+% https://tex.stackexchange.com/questions/44017/dot-notation-for-derivative-of-a-vector
+% --- Macro \xvec
+\makeatletter
+\newlength\xvec@height%
+\newlength\xvec@depth%
+\newlength\xvec@width%
+\newcommand{\xvec}[2][]{%
+  \ifmmode%
+    \settoheight{\xvec@height}{$#2$}%
+    \settodepth{\xvec@depth}{$#2$}%
+    \settowidth{\xvec@width}{$#2$}%
+  \else%
+    \settoheight{\xvec@height}{#2}%
+    \settodepth{\xvec@depth}{#2}%
+    \settowidth{\xvec@width}{#2}%
+  \fi%
+  \def\xvec@arg{#1}%
+  \def\xvec@dd{:}%
+  \def\xvec@d{.}%
+  \raisebox{.2ex}{\raisebox{\xvec@height}{\rlap{%
+    \kern.05em%  (Because left edge of drawing is at .05em)
+    \begin{tikzpicture}[scale=1]
+    \pgfsetroundcap
+    \draw (.05em,0)--(\xvec@width-.05em,0);
+    \draw (\xvec@width-.05em,0)--(\xvec@width-.15em, .075em);
+    \draw (\xvec@width-.05em,0)--(\xvec@width-.15em,-.075em);
+    \ifx\xvec@arg\xvec@d%
+      \fill(\xvec@width*.45,.5ex) circle (.5pt);%
+    \else\ifx\xvec@arg\xvec@dd%
+      \fill(\xvec@width*.30,.5ex) circle (.5pt);%
+      \fill(\xvec@width*.65,.5ex) circle (.5pt);%
+    \fi\fi%
+    \end{tikzpicture}%
+  }}}%
+  #2%
+}
+\makeatother
+
+% --- Override \vec with an invocation of \xvec.
+\let\stdvec\vec
+\renewcommand{\vec}[1]{\xvec[]{#1}}
+% --- Define \dvec and \ddvec for dotted and double-dotted vectors.
+\newcommand{\dvec}[1]{\xvec[.]{#1}}
+\newcommand{\ddvec}[1]{\xvec[:]{#1}}
 
 \begin{document}
 
@@ -88,6 +137,15 @@ Cross product produces a vector that is perpendicular to the input vectors.  Mag
   \end{align*}
 \end{stonk}
 
+\subsection*{Area of 2-parallelogram}
+
+\begin{align*}
+  A&=bh\\
+  b&=\magn{\vec a}\\
+  h&=\magn{\vec b}\sin\theta_{ab}\\
+  A&=\magn{\vec a}\magn{\vec b}\sin\theta_{ab}\\
+  A&=\magn{\vec a\times\vec b}
+\end{align*}
 
 \subsection*{Volume of 3-parallelogram}
 
@@ -97,13 +155,13 @@ Cross product produces a vector that is perpendicular to the input vectors.  Mag
   h&=\magn{\vec{c}}*\cos\theta_{cp}
 \end{align*}
 
-Where $\theta$ is angle between $\vec{c}$ and a vector perpendicular to both $\vec a$ and $\vec b$, $\vec a\times\vec b$.
+Where $\theta_{cp}$ is angle between $\vec{c}$ and a vector perpendicular to both $\vec a$ and $\vec b$, $\vec a\times\vec b$.
 
 \begin{align*}
   (\vec a\times\vec b)\cdot\vec c&=\magn{\vec a\times\vec b}\magn{\vec c}\cos\theta_{cp}\\
   V&=bh\\
   &=\magn{\vec a\times\vec b}\magn{\vec{c}}\cos\theta_{cp}\\
-  &=(\vec a\times\vec b)\cdot\vec c\\
+  V&=(\vec a\times\vec b)\cdot\vec c\\
 \end{align*}
 
 \subsection*{Dot product cosine thing}
@@ -115,7 +173,7 @@ For the latter statement, imagine law of cosines where $\vec a$ and $vec b$ are 
 So, prove
 
 \begin{align*}
-  \magn{\vec{a}\cdot\vec{b}}=\magn{\vec{a}}*\magn{\vec{b}}*\cos\theta
+  \vec{a}\cdot\vec{b}=\magn{\vec{a}}*\magn{\vec{b}}*\cos\theta
 \end{align*}
 
 given
@@ -139,5 +197,133 @@ given
   \magn{\vec a}\magn{\vec b}\cos\theta&=\vec a\cdot\vec b
 \end{align*}
 
+\section*{191 physics equations}
+
+\begin{stonk}
+  \begin{align*}
+    s_f&=s_i+\int^{t_f}_{t_i}v dt
+  \end{align*}
+  For constant acceleration:
+  \begin{align*}
+    v_f&=v_i+a\Delta t\\
+    s_f&=s_i+v_i\Delta t+\frac{1}{2}a(\Delta t)^2\\
+    v_f^2&=v_i^2+2a\Delta s
+  \end{align*}
+\end{stonk}
+
+\section*{191 vectors and components}
+
+$\vec A_x$ is a component vector of $\vec A$.  Component vectors are useless, but vector components are not.
+
+$A_x$ and $A_y$ are components of vector $\vec A$. $\vec A = A_x\hat i + A_y\hat j$
+
+\section*{191 word problems}
+
+With the ski problem, he's still on the slope at 15 m/s.  If he were not on the slope, the problem would have more explicitly said something about it.
+
+\section*{252 equations of planes}
+
+normal = perpendicular
+
+A plane in $\mathbb{R}^3$ is uniquely determined by a normal vector and a point in the plane.
+
+\begin{stonk}
+  The normal equation of the plane:
+  \begin{align*}
+    a(x-x_0)+b(y-y_0)+c(z-z_0)&=0\\
+    \vec n\cdot(\vec w-\vec p_0)&=0
+  \end{align*}
+  $\vec w$ is in the plane iff the equation is satisfied.  That plane contains the point $\vec p_0$ and is normal to $\vec n$.
+\end{stonk}
+
+To write the equation of a plane given 3 points in the normal equation format, you need a point and a perpendicular vector.  You can generate that perpendicular vector by doing a cross product.
+
+\section*{191 2021-09-03 2d kinematics}
+
+$\Delta r_x$ and $\Delta r_y$ (have the ability to) change simultaneously.
+
+\begin{align*}
+  \vec v&=\frac{d\vec r}{dt}\\
+  \vec a&=\frac{d\vec v}{dt}\\
+  \vec b&=b_x\hat i+b_y\hat j
+\end{align*}
+
+Trajectory plots have $x$ and $y$ (space) as axes, not $t$ (time).
+
+The magnitude of the average velocity is the magnitude of the net displacement over $\Delta t$.
+
+To take the derivative of a vector, you can take the derivative of the components.
+
+\section*{252 2021-09-03}
+
+Point $\vec x$ belongs to a line iff a $t$ exists such that $\vec x=t\vec a+\vec b$.
+
+Two lines intersect iff, when you set the equations equal to each other, there exist a value for $s$ and $t$ such that the equation is true (the lines would have the same point).
+
+If they do not intersect, they can either be skew or parallel.
+
+If you have a line ($\vec x=t\vec a+\vec b$) and a plane ($ax + bx + cz = d$), solve for $t$ first to make it easy.
+
+\section*{191 projectile motion}
+
+The projectile starts with initial $x_0$, $y_0$, $v_x_0$, and $v_y_0$, travels with $\vec a$ (whose x component is 0), and ends sometime.
+
+$h$ (height) is the maximum $y$ value.  The range is the horizontal distance between $x_0$ and $x_f$.
+
+\section*{252 vector functions, arc length}
+
+A vector function is a function which maps $\mathbb{R}$ to $\mathbb{R}^3$.
+
+\begin{align*}
+  \lim_{t\to u}\vec{f}(t)&=\langle \lim_{t\to u}f_1(t), ...\rangle\\
+  \dvec f(t)&=\langle f_1'(t),...\rangle\\
+  \int\vec f(t)dt&=\langle\int f_1(t)dt,...\rangle\\
+  (ex)&=\langle t+C_1,\frac{t^2}{2}+C_2,...\rangle\\
+  &=(t\hat i+\frac{t^2}{2}\hat j+...)+(C_1\hat i+C_2\hat j+...)
+\end{align*}
+
+
+\begin{stonk}
+Pretend that the speed of a vector function is the magnitude of its derivative.  You can take the integral of its speed in order to get its length.
+
+\begin{align*}
+  L=\int_a^b\sqrt{r_1'^2(t)+r_2'^2(t)+...}
+\end{align*}
+
+Where $L$ is the length of the curve.
+\end{stonk}
+
+\newpage
+\section*{252 computing curvature of vector functions}
+
+\begin{align*}
+  s(t_0)=\int_a^{t_0}\magn{\dvec r(t)}dt
+\end{align*}
+
+Solve for $t_0$ for the length of curve between two points on curve.
+
+\begin{align*}
+  \kappa (s)=\magn{\frac{d\vec T(s)}{ds}}
+\end{align*}
+
+Where $\vec T$ is the unit vector of the derivative.
+
+$\kappa$ represents how curved a curve is.
+
+Here are easier formulas.  Use the last one.
+
+\begin{align*}
+  \kappa (t)&=\frac{\magn{\dvec T(t)}}{\magn{\dvec r(t)}}\\
+  \kappa (t)&=\frac{\magn{\dvec r(t)\times\ddvec r(t)}}{\magn{\xvec[.]{r}(t)}^3}
+\end{align*}
+
+\begin{align*}
+  \vec T\circ t&=\frac{\dvec r}{\magn{\dvec r}}\\
+  \vec N\circ t&=\frac{\dvec T}{\magn{\dvec T}}\\
+\end{align*}
+
+\section*{252 chapter 14}
+
+$f:\mathbb{R}^n\to\mathbb{R}$
 
 \end{document}
